@@ -4,6 +4,7 @@
 function Commons(opt) {
     const undef = void 0;
     const outputLog = opt && opt.log ? opt.log : console.log;
+    const random = opt && opt.random ? opt.random : Math.random;
 
     function $(x) {
         outputLog(x);
@@ -59,6 +60,7 @@ function Commons(opt) {
                : args.slice(1).reduce((x, y) => x / y, args[0]);
     }
 
+    const square = x => x * x;
     const sin = x => Math.sin(x);
     const cos = x => Math.cos(x);
     const tan = x => Math.tan(x);
@@ -131,6 +133,34 @@ function Commons(opt) {
         }
     }
 
+    function randomNormal(sigma) {
+        const TWO_PI = 2 * Math.PI;
+        let u1;
+
+        do {
+            u1 = random();
+        } while(u1 <= Number.MIN_VALUE);
+
+        const u2 = random();
+        const mag = sigma * Math.sqrt(-2.0 * Math.log(u1));
+        const z0 = mag * Math.cos(TWO_PI * u2);
+
+        return z0;
+    }
+
+    function randomChiSquare(n) {
+        if(!Number.isSafeInteger(n) || n < 1) {
+            error("Positive integer required", n);
+        } else {
+            let result = 0;
+
+            for(let i = 0; i < n; i++) {
+                result += square(randomNormal(1));
+            }
+            return result;
+        }
+    }
+
     function fixed(...l) {
         const delays = [];
         const memo = [];
@@ -161,6 +191,7 @@ function Commons(opt) {
         subtract: subtract,
         multiply: multiply,
         divide: divide,
+        square: square,
         sin: sin,
         cos: cos,
         tan: tan,
@@ -191,6 +222,8 @@ function Commons(opt) {
         intersect: intersect,
         except: except,
         xor: xor,
+        randomNormal: randomNormal,
+        randomChiSquare: randomChiSquare,
         fixed: fixed
     };
     return me;
