@@ -133,34 +133,6 @@ function Commons(opt) {
         }
     }
 
-    function randomNormal(sigma) {
-        const TWO_PI = 2 * Math.PI;
-        let u1;
-
-        do {
-            u1 = random();
-        } while(u1 <= Number.MIN_VALUE);
-
-        const u2 = random();
-        const mag = sigma * Math.sqrt(-2.0 * Math.log(u1));
-        const z0 = mag * Math.cos(TWO_PI * u2);
-
-        return z0;
-    }
-
-    function randomChiSquare(n) {
-        if(!Number.isSafeInteger(n) || n < 1) {
-            error("Positive integer required", n);
-        } else {
-            let result = 0;
-
-            for(let i = 0; i < n; i++) {
-                result += square(randomNormal(1));
-            }
-            return result;
-        }
-    }
-
     function fixed(...l) {
         const delays = [];
         const memo = [];
@@ -222,8 +194,6 @@ function Commons(opt) {
         intersect: intersect,
         except: except,
         xor: xor,
-        randomNormal: randomNormal,
-        randomChiSquare: randomChiSquare,
         fixed: fixed
     };
     return me;
